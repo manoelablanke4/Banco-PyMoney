@@ -121,7 +121,6 @@ def criar_conta(contas,usuarios):
     print('--------------------------------')
     print()
 
-
     
 while True:
     opcao = input(menu)
