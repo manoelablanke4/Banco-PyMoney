@@ -1,5 +1,6 @@
 import datetime
 import re
+import test
 
 
 menu = """"
@@ -15,6 +16,9 @@ Qual operação deseja realizar?
 
 --------------------------------
 """
+
+conta = test.Conta(0,1,'0001','José',[])
+print(conta.saldo)
 vezes_saque = 0
 saldo = 0
 extrato = []
@@ -49,16 +53,22 @@ def saque(*,valor,limite_saque,vezes_saque,saldo,extrato):
         print()
         return saldo, extrato
 
-def deposito(valor,saldo,extrato,/):
-    saldo += valor
-    date = datetime.datetime.now()
-    extrato.append(f'Depósito: + R$ {valor} - {date.strftime("%d/%m/%Y %H:%M:%S")}')
-    print()
-    print('--------------------------------')
-    print('==== Sua operação de depósito foi realizada com sucesso ====')
-    print('--------------------------------')
-    print()
-    return saldo, extrato
+def deposito(clientes):
+    cpf = input('Digite seu CPF: ')
+    cliente = filtrar_usuarios(clientes,cpf)
+
+    if not cliente:
+        print()
+        print('--------------------------------')
+        print('CPF não cadastrado. Tente novamente.')
+        print('--------------------------------')
+        print()
+        return
+    
+    valor = float(input('Qual valor deseja depositar? '))
+   
+
+    
 
 def extrato_funcao(saldo,/,*,extrato):
     extrato.append(f'Saldo: R$ {saldo}')
@@ -120,13 +130,19 @@ def criar_conta(contas,usuarios):
     print(f'Conta com número {numero_conta} criado com sucesso!')
     print('--------------------------------')
     print()
-
+def conta_do_cliente(cpf):
+    for conta in contas:
+        if conta['cpf'] == cpf:
+            return conta
+    return False
     
 while True:
-    opcao = input(menu)
+    opcao = menu()
+
+    clientes = []
+    contas = []
     if opcao == 'd':
-        valor = float(input('Qual valor deseja depositar? '))
-        saldo, extrato = deposito(valor, saldo, extrato)
+        deposito(clientes,valor)
 
     elif opcao == 's':
         vezes_saque += 1
